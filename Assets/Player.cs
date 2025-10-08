@@ -1,36 +1,35 @@
-using Unity.Mathematics.Geometry;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Math = System.Math;
 
 public class Player : MonoBehaviour
 {
-
-    [SerializeField]private float speed;
+    [SerializeField] private float spd;
+    [SerializeField] private float rotSpd;
     private Transform t;
     private Vector2 pos;
     private Vector2 vel;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Camera cam;
+
     void Start()
     {
-        t = this.GetComponent<Transform>();
+        t = GetComponent<Transform>();
+        cam = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        
-        vel = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical") ) * (Time.deltaTime * speed);
+        // Movement
+        vel = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * (spd * Time.deltaTime);
         pos += vel;
-
-        float theta = Mathf.Atan2(mousePos.x, mousePos.y);
-
-        t.rotation = new Quaternion(0,theta,0,0);
         t.position = new Vector3(pos.x, pos.y, 0);
+
+        // Rotation toward mouse
+        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = (mousePos - transform.position);
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+
+        float currentAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, rotSpd * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0f, 0f, currentAngle);
     }
-    
-    
 }
