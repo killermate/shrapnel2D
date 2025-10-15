@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class BasicGun : MonoBehaviour
 {
-    [SerializeField] private GameObject projectile;
-    [SerializeField] private Transform projectileSpawn;
-    [SerializeField] private float atkSpd = 0.01f;
+    [SerializeField] protected GameObject projectile;
+    [SerializeField] protected Transform projectileSpawn;
+    [SerializeField] private float atkSpd;
     float atkTime = 0f;
-    void Update()
+    protected virtual void Update()
     {
+        atkTime += Time.deltaTime;
         if (Input.GetMouseButton(0))
         {
             if (atkTime >= atkSpd)
@@ -15,11 +16,9 @@ public class BasicGun : MonoBehaviour
                 Shoot();
                 atkTime = 0f;
             }
-            atkTime += Time.deltaTime;
         }
-        
     }
 
-    void Shoot() => Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
+    protected virtual void Shoot() => Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
     
 }

@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
         rb.linearVelocity = transform.right * speed;  // or transform.up, depending on your sprite orientation
     }
 
-    void Update()
+    protected virtual void Update()
     {
         lifeTime -= Time.deltaTime;
         if (lifeTime <= 0) Destroy(gameObject);
