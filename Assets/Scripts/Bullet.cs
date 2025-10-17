@@ -6,10 +6,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float lifeTime = 5f;
     private Rigidbody2D rb;
 
-    void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = transform.right * speed;  // or transform.up, depending on your sprite orientation
+        rb.linearVelocity = transform.right * speed; // or transform.up, depending on sprite orientation
     }
 
     protected virtual void Update()
